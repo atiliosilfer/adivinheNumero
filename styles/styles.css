@@ -65,6 +65,26 @@ button {
     padding: 12px 20px;
     margin: 8px 11px;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#new-game-btn {
+    background: linear-gradient(180deg, #434854 0%, #9E9E9E 100%);
+}
+
+button:disabled,
+button[disabled] {
+    color: #FFF;
+    background: #DDDDDD;
+    cursor: default;
+}
+
+input:disabled {
+    background-color: #DDDDDD;
+    border: 1px solid #CFCFCF;
+    color: #9E9E9E;
 }
 
 #new-game {
