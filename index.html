@@ -7,20 +7,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>QUAL É O NÚMERO?</title>
     <link type="text/css" rel="stylesheet" href="./styles/styles.css" />
+    <script src="./scripts/ElementArray.js"></script>
+    <script src="./scripts/SegmentCanvas.js"></script>
+    <script src="./scripts/SevenSegment.js"></script>
     <script src="./scripts/script.js"></script>
+
 </head>
 
 <body>
     <h1>QUAL É O NÚMERO?</h1>
     <hr>
 
-
-
     <div>
         <h3 id="tip-text"></h3>
-        <h3 id="typed-number">0</h3>
-        <button id="new-game-btn" type="button" onclick="getRandomNumber()"><img src="./assets/refresh.svg">NOVA
-      PARTIDA</button>
+        <canvas id="canvas"></canvas>
+        <button id="new-game-btn" type="button" visible="false" onclick="getRandomNumber()">
+            <img src="./assets/refresh.svg" />
+            NOVA PARTIDA
+        </button>
     </div>
 
 
@@ -28,7 +32,6 @@
         <input id="input-number" type="number" placeholder="Digite o palpite"></input>
         <button id="send-btn" type="button" onclick="handleClickSendButton()">ENVIAR</button>
     </div>
-
 
 </body>
 

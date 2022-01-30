@@ -4,11 +4,15 @@
     box-sizing: border-box;
 }
 
-h1,
-h3 {
+h1 {
     justify-content: center;
     display: flex;
-    margin-top: 40px;
+    margin-top: 80px;
+}
+
+h3 {
+    margin-top: 100px;
+    margin-bottom: 30px;
 }
 
 hr {
@@ -30,6 +34,7 @@ textarea {
 div {
     justify-content: center;
     display: grid;
+    justify-items: center;
 }
 
 .input-container {
@@ -68,10 +73,16 @@ button {
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 42px;
 }
 
 #new-game-btn {
     background: linear-gradient(180deg, #434854 0%, #9E9E9E 100%);
+    width: 130px;
+    white-space: nowrap;
+    margin-top: 56px;
+    margin-bottom: 73px;
+    visibility: hidden;
 }
 
 button:disabled,
@@ -85,9 +96,4 @@ input:disabled {
     background-color: #DDDDDD;
     border: 1px solid #CFCFCF;
     color: #9E9E9E;
-}
-
-#new-game {
-    visibility: hidden;
-    background: linear-gradient(180deg, #434854 0%, #9E9E9E 100%);
 }
