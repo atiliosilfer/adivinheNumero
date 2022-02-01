@@ -10,11 +10,13 @@ getRandomNumber = function() {
         let data = JSON.parse(this.responseText);
 
         if (data.value) {
+            console.log(data.value);
             randomNumber = data.value;
             document.getElementById("tip-text").innerHTML = '';
             generateCanvas(0);
             document.getElementById("new-game-btn").style.visibility = 'hidden';
             document.getElementById("input-number").disabled = false;
+            document.getElementById("input-number").value = '';
             document.getElementById("send-btn").disabled = false;
         } else {
             document.getElementById("tip-text").innerHTML = 'ERRO';
@@ -22,6 +24,7 @@ getRandomNumber = function() {
             generateCanvas(data.StatusCode, red);
             document.getElementById("new-game-btn").style.visibility = 'visible';
             document.getElementById("input-number").disabled = true;
+            document.getElementById("input-number").value = '';
             document.getElementById("send-btn").disabled = true;
         }
     }
@@ -35,9 +38,9 @@ getRandomNumber = function() {
 }
 
 handleClickSendButton = function() {
-    let value = document.getElementById("input-number").value;
+    let value = Math.trunc(document.getElementById("input-number").value);
 
-    value = value <= 300 ? (value == '' ? 0 : value) : 300;
+    value = value <= 300 ? (value == '' || value < 0 ? 0 : value) : 300;
 
     generateCanvas(value);
 
@@ -48,9 +51,9 @@ handleClickSendButton = function() {
         document.getElementById("tip-text").style.color = orange;
         document.getElementById("tip-text").innerHTML = 'É maior';
     } else {
+        generateCanvas(value, green);
         document.getElementById("tip-text").style.color = green;
         document.getElementById("tip-text").innerHTML = 'Você acertou!!!!';
-        generateCanvas(value, green);
         document.getElementById("new-game-btn").style.visibility = 'visible';
         document.getElementById("input-number").disabled = true;
         document.getElementById("send-btn").disabled = true;
