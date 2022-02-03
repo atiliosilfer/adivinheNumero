@@ -3,6 +3,20 @@ const orange = '#FF6600';
 const red = '#CC3300';
 const green = '#32BF00';
 
+function screenManager(tipText, tipTextColor, newGameButtonVisibility, inputNumberDisabled, inputNumberValue, sendButtonDisabled, generateCanvasNumber, generateCanvasColor) {
+    generateCanvas(generateCanvasNumber, generateCanvasColor);
+    tipTextManager(tipText, tipTextColor);
+    document.getElementById("new-game-btn").style.visibility = newGameButtonVisibility ? 'visible' : 'hidden';
+    document.getElementById("input-number").disabled = inputNumberDisabled;
+    document.getElementById("input-number").value = inputNumberValue;
+    document.getElementById("send-btn").disabled = sendButtonDisabled;
+}
+
+function tipTextManager(tipText, tipTextColor) {
+    document.getElementById("tip-text").innerHTML = tipText;
+    document.getElementById("tip-text").style.color = tipTextColor;
+}
+
 getRandomNumber = function() {
     let xhr = new XMLHttpRequest();
 
@@ -10,22 +24,10 @@ getRandomNumber = function() {
         let data = JSON.parse(this.responseText);
 
         if (data.value) {
-            console.log(data.value);
             randomNumber = data.value;
-            document.getElementById("tip-text").innerHTML = '';
-            generateCanvas(0);
-            document.getElementById("new-game-btn").style.visibility = 'hidden';
-            document.getElementById("input-number").disabled = false;
-            document.getElementById("input-number").value = '';
-            document.getElementById("send-btn").disabled = false;
+            screenManager('', orange, false, false, '', false, 0);
         } else {
-            document.getElementById("tip-text").innerHTML = 'ERRO';
-            document.getElementById("tip-text").style.color = red;
-            generateCanvas(data.StatusCode, red);
-            document.getElementById("new-game-btn").style.visibility = 'visible';
-            document.getElementById("input-number").disabled = true;
-            document.getElementById("input-number").value = '';
-            document.getElementById("send-btn").disabled = true;
+            screenManager('ERRO', red, true, true, '', true, data.StatusCode, red);
         }
     }
 
@@ -45,18 +47,11 @@ handleClickSendButton = function() {
     generateCanvas(value);
 
     if (value > randomNumber) {
-        document.getElementById("tip-text").style.color = orange;
-        document.getElementById("tip-text").innerHTML = 'É menor';
+        tipTextManager('É menor', orange);
     } else if (value < randomNumber) {
-        document.getElementById("tip-text").style.color = orange;
-        document.getElementById("tip-text").innerHTML = 'É maior';
+        tipTextManager('É maior', orange);
     } else {
-        generateCanvas(value, green);
-        document.getElementById("tip-text").style.color = green;
-        document.getElementById("tip-text").innerHTML = 'Você acertou!!!!';
-        document.getElementById("new-game-btn").style.visibility = 'visible';
-        document.getElementById("input-number").disabled = true;
-        document.getElementById("send-btn").disabled = true;
+        screenManager('Você acertou!!!!', green, true, true, '', true, value, green);
     }
 }
 

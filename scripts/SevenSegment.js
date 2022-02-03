@@ -20,17 +20,17 @@ function SevenSegment(count, canvas, color, width, height, x, y) {
 SevenSegment.prototype = new SegmentCanvas();
 
 SevenSegment.prototype.CalcPoints = function() {
-    var d = this.CalcElementDimensions(),
-        w = d.Width,
-        h = d.Height,
-        sw = this.SegmentWidth * w,
-        si = this.SegmentInterval * w,
-        bw = this.BevelWidth * sw,
-        br = bw / sw,
+    var dimensions = this.CalcElementDimensions(),
+        width = dimensions.Width,
+        height = dimensions.Height,
+        segmentWidth = this.SegmentWidth * width,
+        segmentInterval = this.SegmentInterval * width,
+        bevelWidth = this.BevelWidth * segmentWidth,
+        border = bevelWidth / segmentWidth,
         sqrt2 = Math.SQRT2,
         sqrt3 = Math.sqrt(3);
 
-    // Calculate Points[][] for all 7 segments
+    // Calcular pontos para os 7 segmentos
     var A = 0,
         B = 1,
         C = 2,
@@ -40,36 +40,36 @@ SevenSegment.prototype.CalcPoints = function() {
         G = 6;
     var points = [];
     points[A] = [
-        { x: sw * br * 2 + si / sqrt2, y: 0 },
-        { x: w - sw * br * 2 - si / sqrt2, y: 0 },
-        { x: w - sw * br - si / sqrt2, y: sw * br },
-        { x: w - sw - si / sqrt2, y: sw },
-        { x: sw + si / sqrt2, y: sw },
-        { x: sw * br + si / sqrt2, y: sw * br }
+        { x: segmentWidth * border * 2 + segmentInterval / sqrt2, y: 0 },
+        { x: width - segmentWidth * border * 2 - segmentInterval / sqrt2, y: 0 },
+        { x: width - segmentWidth * border - segmentInterval / sqrt2, y: segmentWidth * border },
+        { x: width - segmentWidth - segmentInterval / sqrt2, y: segmentWidth },
+        { x: segmentWidth + segmentInterval / sqrt2, y: segmentWidth },
+        { x: segmentWidth * border + segmentInterval / sqrt2, y: segmentWidth * border }
     ];
 
     points[B] = [
-        { x: w, y: sw * br * 2 + si / sqrt2 },
-        { x: w, y: h / 2 - si * .5 },
-        { x: w - sw / 2, y: h / 2 - si * .5 },
-        { x: w - sw, y: h / 2 - sw / 2 - si * .5 },
-        { x: w - sw, y: sw + si / sqrt2 },
-        { x: w - sw * br, y: sw * br + si / sqrt2 }
+        { x: width, y: segmentWidth * border * 2 + segmentInterval / sqrt2 },
+        { x: width, y: height / 2 - segmentInterval * .5 },
+        { x: width - segmentWidth / 2, y: height / 2 - segmentInterval * .5 },
+        { x: width - segmentWidth, y: height / 2 - segmentWidth / 2 - segmentInterval * .5 },
+        { x: width - segmentWidth, y: segmentWidth + segmentInterval / sqrt2 },
+        { x: width - segmentWidth * border, y: segmentWidth * border + segmentInterval / sqrt2 }
     ];
 
     points[G] = [
-        { x: sw + si / 2 * sqrt3, y: h / 2 - sw / 2 },
-        { x: w - sw - si / 2 * sqrt3, y: h / 2 - sw / 2 },
-        { x: w - sw / 2 - si / 2 * sqrt3, y: h / 2 },
-        { x: w - sw - si / 2 * sqrt3, y: h / 2 + sw / 2 },
-        { x: sw + si / 2 * sqrt3, y: h / 2 + sw / 2 },
-        { x: sw / 2 + si / 2 * sqrt3, y: h / 2 }
+        { x: segmentWidth + segmentInterval / 2 * sqrt3, y: height / 2 - segmentWidth / 2 },
+        { x: width - segmentWidth - segmentInterval / 2 * sqrt3, y: height / 2 - segmentWidth / 2 },
+        { x: width - segmentWidth / 2 - segmentInterval / 2 * sqrt3, y: height / 2 },
+        { x: width - segmentWidth - segmentInterval / 2 * sqrt3, y: height / 2 + segmentWidth / 2 },
+        { x: segmentWidth + segmentInterval / 2 * sqrt3, y: height / 2 + segmentWidth / 2 },
+        { x: segmentWidth / 2 + segmentInterval / 2 * sqrt3, y: height / 2 }
     ];
 
-    points[C] = this.FlipVertical(points[B], h);
-    points[D] = this.FlipVertical(points[A], h);
-    points[E] = this.FlipHorizontal(points[C], w);
-    points[F] = this.FlipHorizontal(points[B], w);
+    points[C] = this.FlipVertical(points[B], height);
+    points[D] = this.FlipVertical(points[A], height);
+    points[E] = this.FlipHorizontal(points[C], width);
+    points[F] = this.FlipHorizontal(points[B], width);
     this.Points = points;
 }
 

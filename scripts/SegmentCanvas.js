@@ -1,111 +1,103 @@
 /*******************************************************************************
  * SegmentCanvas
  * @constructor 
- * Base functionality for drawing a segment display to a canvas. Loops through
- * each element (this.ElementArray) and draws each segment shape (this.Points[][])
- * Allows you to configure the design by changing settings(bevel, color, etc...)
+ * Funcionalidade base para desenhar um segmento de display no canvas.
+ * Repetição atraves de cada elemento (this.ElementArray) e desenhe cada corpo do
+ * segmento (this.Points[][])
  ******************************************************************************/
 
 function SegmentCanvas() {
     "use strict";
-    this.SegmentWidth = 0.16; // Width of segments (% of Element Width)
-    this.SegmentInterval = 0.03; // Spacing between segments (% of Element Width)
-    this.BevelWidth = 0.16; // Size of corner bevel (% of Element Width)
-    this.SideBevelEnabled = false; // Should the sides be beveled
-    this.FillLight = '#262A34'; // Color of an on segment
-    this.FillDark = "#DDDDDD"; // Color of an off segment
-    this.StrokeLight = "#007700"; // Color of an on segment outline
-    this.StrokeDark = "#440044"; // Color of an off segment outline
-    this.StrokeWidth = 0; // Width of segment outline
-    this.Padding = 10; // Padding around the display
-    this.Spacing = 10; // Spacing between elements
-    this.X = 0; // Starting position on the canvas
+    this.SegmentWidth = 0.16; // Largura do segment (% of Element Width)
+    this.SegmentInterval = 0.03; // Espaço entre os segmentos (% of Element Width)
+    this.BevelWidth = 0.16; // Tamanho da ponta do segmento (% of Element Width)
+    this.FillLight = '#262A34'; // Cor de um segmento ativado
+    this.FillDark = "#DDDDDD"; // Cor de um segmento desativado
+    this.Padding = 10; // Padding ao redor do display
+    this.Spacing = 10; // Espaço entre os elementos
+    this.X = 0; // Posição inicial do canvas
     this.Y = 0;
-    this.Width = 200; // Default size of the display
+    this.Width = 200; // Tamanho padrão do display
     this.Height = 100;
     this.ElementArray = new ElementArray(1);
 }
 
-// Sets the display output to the given text, recalculates 
-// the segment points and draws the segment to the canvas
+// Define a saída de exibição do display, calcula os pontos e desenha os segmentos 
 SegmentCanvas.prototype.DisplayText = function(value) {
     "use strict";
-    // Recalculate points in case any settings changed
+    // Recalcula os pontos caso necessário
     this.CalcPoints();
-    // Set the display patterns and draw the canvas
+    // Define os padrões de exibição e desenha no canvas
     this.ElementArray.SetText(value, this.CharacterMasks);
     this.Draw(this.Canvas, this.ElementArray.Elements);
 };
 
-// Draws the segment display to a canvas
+// Desenha os segmentos no canvas
 SegmentCanvas.prototype.Draw = function(canvas, elements) {
     "use strict";
-    // Get the context and clear the area
+    // Obtem o contexto e limpa o canvas
     var context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.save();
 
-    // Calculate the width and spacing of each element
+    // Calcula a largura e o espaço entre os segmentos
     var elementWidth = this.CalcElementDimensions().Width;
 
-    // Offset to adjust for starting point and padding
+    // Desloca para ajustar o ponto de partida e preenchimento
     context.translate(this.X, this.Y);
     context.translate(this.Padding, this.Padding);
 
-    // Draw each segment of each element
+    // Desenha cada segmento de cada elemento
     for (var i = 0; i < elements.length; i++) {
         var element = elements[i];
         for (var s = 0; s < this.Points.length; s++) {
-            // Pick the on or off color based on the bitmask
+            // Escolha a cor ativada ou desativada com base na máscara de bits
             var color = (element & 1 << s) ? this.FillLight : this.FillDark;
-            var stroke = (element & 1 << s) ? this.StrokeLight : this.StrokeDark;
-            context.lineWidth = this.StrokeWidth;
-            context.strokeStyle = stroke;
+
             context.fillStyle = color;
             context.beginPath();
             context.moveTo(this.Points[s][0].x, this.Points[s][0].y);
-            // Create the segment path
+            // Crie o caminho do segmento
             for (var p = 1; p < this.Points[s].length; p++) {
                 context.lineTo(this.Points[s][p].x, this.Points[s][p].y);
             }
             context.closePath();
             context.fill();
-            if (this.StrokeWidth > 0) { context.stroke(); }
         }
         context.translate(elementWidth + this.Spacing, 0);
     }
     context.restore();
 };
 
-// Set the number of elements in the display
+// Defina o número de elementos na exibição
 SegmentCanvas.prototype.SetCount = function(count) {
     "use strict";
     this.ElementArray.SetCount(count);
 };
 
-// Get the number of elements in the display
+// Obter o número de elementos na exibição
 SegmentCanvas.prototype.GetCount = function() {
     "use strict";
     return this.ElementArray.Elements.length;
 };
 
-// Calculates the width and height of a single display element
-// based on the number of elements and space available in the control
+// Calcula a largura e a altura de um único elemento de exibição com base no 
+// número de elementos e no espaço disponível no controle
 SegmentCanvas.prototype.CalcElementDimensions = function() {
     "use strict";
-    var n = this.ElementArray.Elements.length;
-    var h = this.Height;
-    h -= this.Padding * 2;
+    var numberElements = this.ElementArray.Elements.length;
+    var height = this.Height;
+    height -= this.Padding * 2;
 
-    var w = this.Width;
-    w -= this.Spacing * (n - 1);
-    w -= this.Padding * 2;
-    w /= n;
+    var width = this.Width;
+    width -= this.Spacing * (numberElements - 1);
+    width -= this.Padding * 2;
+    width /= numberElements;
 
-    return { Width: w, Height: h };
+    return { Width: width, Height: height };
 };
 
-// Creates a new set of points flipped vertically
+// Cria um novo conjunto de pontos invertidos verticalmente
 SegmentCanvas.prototype.FlipVertical = function(points, height) {
     "use strict";
     var flipped = [];
@@ -117,7 +109,7 @@ SegmentCanvas.prototype.FlipVertical = function(points, height) {
     return flipped;
 };
 
-// Creates a new set of points flipped horizontally
+// Cria um novo conjunto de pontos invertidos horizontalmente
 SegmentCanvas.prototype.FlipHorizontal = function(points, width) {
     "use strict";
     var flipped = [];

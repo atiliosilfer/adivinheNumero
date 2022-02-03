@@ -1,56 +1,56 @@
 /*******************************************************************************
  * Segment Array
  * @constructor 
- * Holds an array of bitmask which store the display pattern for a segmented
- * display.  Provides functions for setting the pattern to display text
+ * Contém uma matriz de bitmask que armazena o padrão de exibição para um segmento
+ * exibição. Fornece funções para definir o padrão para exibir texto
  ******************************************************************************/
 function ElementArray(count) {
     "use strict";
     this.SetCount(count || 0);
 }
 
-// Default bitmask for undefined patterns
+// Bitmask padrão
 ElementArray.prototype.NullMask = 0x10;
 
-// Sets the number of elements in the display
+// Define o número de elementos no display
 ElementArray.prototype.SetCount = function(count) {
     "use strict";
-    var c = parseInt(count, 10);
-    if (isNaN(c)) {
+    var elementCounter = parseInt(count, 10);
+    if (isNaN(elementCounter)) {
         throw "Invalid element count: " + count;
     }
-    this.Elements = [c];
-    for (var i = 0; i < c; i++) {
+    this.Elements = [elementCounter];
+    for (var i = 0; i < elementCounter; i++) {
         this.Elements[i] = 0;
     }
 };
 
-// Sets the display pattern to show the given text
+// Define o padrão de exibição para mostrar o texto fornecido
 ElementArray.prototype.SetText = function(value, charMaps) {
     "use strict";
-    // Get the string of the value passed in
+    // Obtem a string do valor passado
     if (value === null) { value = ""; }
     value = value.toString();
 
-    // Clear the elements
+    // Limpa os elementos
     for (var i = 0; i < this.Elements.length; i++) {
         this.SetElementValue(i, 0);
     }
     if (value.length === 0) { return; }
 
-    // Set the bitmask to dispay the proper character for each element
+    // Define a máscara de bits para exibir o caractere apropriado para cada elemento
     for (var e = 0; e < this.Elements.length && e < value.length; e++) {
-        var c = value[e];
-        var mask = charMaps[c];
-        // Use blank of there is no bitmask for this character
-        if (mask === null || mask === undefined) {
+        var elementCounter = value[e];
+        var mask = charMaps[elementCounter];
+        // Use em branco ou não há bitmask para este caractere
+        if (!mask) {
             mask = this.NullMask;
         }
         this.SetElementValue(e, mask);
     }
 };
 
-// Sets the bitmask pattern for a specific element in the display
+// Define o padrão de máscara de bits para um elemento específico na exibição
 ElementArray.prototype.SetElementValue = function(i, value) {
     "use strict";
     if (i >= 0 && i < this.Elements.length) {
